@@ -8,7 +8,7 @@ use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\BlogAuthorResour
 use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
 
-class BlogPlugin implements Plugin
+final class BlogPlugin implements Plugin
 {
     public function getId(): string
     {
