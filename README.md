@@ -22,32 +22,164 @@ A powerful, feature-rich blog engine for Laravel applications with a beautiful F
 
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
 composer require joaoolival/laravel-blog-engine
 ```
 
-Run the install command to set up everything automatically:
+Run the install command:
 
 ```bash
 php artisan blog-engine:install
 ```
 
-The installer will guide you through:
-
-1. Publishing migrations
-2. Running database migrations
-3. Setting up the Filament panel
-4. Publishing assets
-5. Creating an admin user (optional)
+The installer will guide you through publishing migrations, running them, setting up Filament, and optionally creating an admin user.
 
 ### Storage Link
 
-To display uploaded images correctly, you need to create a symbolic link from `public/storage` to `storage/app/public`:
+To display uploaded images correctly, create the storage symbolic link:
 
 ```bash
 php artisan storage:link
+```
+
+## Models
+
+The package provides three Eloquent models that you can use directly in your application.
+
+### BlogPost
+
+```php
+use Joaoolival\LaravelBlogEngine\Models\BlogPost;
+```
+
+| Attribute          | Type           | Description                   |
+| ------------------ | -------------- | ----------------------------- |
+| `id`               | `int`          | Primary key                   |
+| `title`            | `string`       | Post title                    |
+| `slug`             | `string`       | URL-friendly slug (unique)    |
+| `excerpt`          | `string\|null` | Short summary                 |
+| `content`          | `string\|null` | Full post content (rich text) |
+| `tags`             | `array\|null`  | JSON array of tags            |
+| `is_visible`       | `bool`         | Visibility status             |
+| `published_at`     | `Carbon\|null` | Publish date/time             |
+| `blog_author_id`   | `int\|null`    | Foreign key to author         |
+| `blog_category_id` | `int\|null`    | Foreign key to category       |
+
+**Relationships:**
+
+-   `author()` → `BelongsTo` BlogAuthor
+-   `category()` → `BelongsTo` BlogCategory
+
+**Scopes:**
+
+```php
+// Get only published posts (visible + published_at <= now)
+BlogPost::whereIsPublished()->get();
+
+// Get draft posts (not published yet)
+BlogPost::whereIsDraft()->get();
+
+// Get visible posts
+BlogPost::whereIsVisible()->get();
+```
+
+**Media Collections:**
+
+-   `gallery` - Post images
+-   `content-attachments` - Rich editor attachments
+
+### BlogAuthor
+
+```php
+use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
+```
+
+| Attribute          | Type           | Description           |
+| ------------------ | -------------- | --------------------- |
+| `id`               | `int`          | Primary key           |
+| `name`             | `string`       | Author name           |
+| `slug`             | `string\|null` | URL-friendly slug     |
+| `email`            | `string`       | Author email (unique) |
+| `bio`              | `string\|null` | Author biography      |
+| `is_visible`       | `bool`         | Visibility status     |
+| `github_handle`    | `string\|null` | GitHub username       |
+| `twitter_handle`   | `string\|null` | Twitter/X username    |
+| `linkedin_handle`  | `string\|null` | LinkedIn username     |
+| `instagram_handle` | `string\|null` | Instagram username    |
+| `facebook_handle`  | `string\|null` | Facebook username     |
+
+**Relationships:**
+
+-   `posts()` → `HasMany` BlogPost
+
+**Media Collections:**
+
+-   `avatar` - Author profile picture (single file)
+
+### BlogCategory
+
+```php
+use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
+```
+
+| Attribute         | Type           | Description                |
+| ----------------- | -------------- | -------------------------- |
+| `id`              | `int`          | Primary key                |
+| `name`            | `string`       | Category name              |
+| `slug`            | `string`       | URL-friendly slug (unique) |
+| `description`     | `string\|null` | Category description       |
+| `is_visible`      | `bool`         | Visibility status          |
+| `seo_title`       | `string\|null` | SEO meta title             |
+| `seo_description` | `string\|null` | SEO meta description       |
+
+**Relationships:**
+
+-   `posts()` → `HasMany` BlogPost
+
+**Media Collections:**
+
+-   `banner_image` - Category banner (single file)
+
+## Query Examples
+
+```php
+use Joaoolival\LaravelBlogEngine\Models\BlogPost;
+use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
+use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
+
+// Get all published posts with author and category
+$posts = BlogPost::whereIsPublished()
+    ->with(['author', 'category'])
+    ->latest('published_at')
+    ->get();
+
+// Get a post by slug
+$post = BlogPost::where('slug', 'my-post-slug')
+    ->whereIsPublished()
+    ->firstOrFail();
+
+// Get posts by category
+$category = BlogCategory::where('slug', 'tutorials')->first();
+$posts = $category->posts()->whereIsPublished()->get();
+
+// Get posts by author
+$author = BlogAuthor::where('slug', 'john-doe')->first();
+$posts = $author->posts()->whereIsPublished()->get();
+
+// Get all visible categories with post count
+$categories = BlogCategory::whereIsVisible()
+    ->withCount(['posts' => fn($q) => $q->whereIsPublished()])
+    ->get();
+
+// Get featured image from post gallery
+$post = BlogPost::find(1);
+$featuredImage = $post->getFirstMediaUrl('gallery', 'webp');
+
+// Get author avatar
+$author = BlogAuthor::find(1);
+$avatarUrl = $author->getFirstMediaUrl('avatar', 'webp');
 ```
 
 ## Responsive Images & SEO
@@ -58,7 +190,7 @@ This package uses [Spatie Media Library](https://spatie.be/docs/laravel-medialib
 -   **Better SEO scores** - Optimized images improve Core Web Vitals
 -   **Reduced bandwidth** - Smaller images for mobile users
 
-To enable background processing, simply install and configure Horizon:
+To enable background processing:
 
 ```bash
 composer require laravel/horizon
@@ -66,17 +198,20 @@ php artisan horizon:install
 php artisan horizon
 ```
 
-## Usage
+## Admin Panel
 
-After installation, access the admin panel at `/admin`. The blog engine adds these resources:
+After installation, access the admin at `/admin`:
 
--   **Blog Posts** - `/admin/blog-posts`
--   **Authors** - `/admin/blog-authors`
--   **Categories** - `/admin/blog-categories`
+| Resource   | URL                      |
+| ---------- | ------------------------ |
+| Dashboard  | `/admin`                 |
+| Blog Posts | `/admin/blog-posts`      |
+| Authors    | `/admin/blog-authors`    |
+| Categories | `/admin/blog-categories` |
 
 ### Manual Plugin Registration
 
-If the installer couldn't automatically register the plugin, add it to your panel provider:
+If needed, manually register the plugin in your panel provider:
 
 ```php
 use Joaoolival\LaravelBlogEngine\BlogPlugin;
