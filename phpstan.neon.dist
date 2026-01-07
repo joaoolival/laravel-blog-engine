@@ -9,6 +9,8 @@ parameters:
         - database
         - tests
     tmpDir: build/phpstan
+    parallel:
+        maximumNumberOfProcesses: 2
     checkOctaneCompatibility: true
     checkModelProperties: true
     ignoreErrors:
