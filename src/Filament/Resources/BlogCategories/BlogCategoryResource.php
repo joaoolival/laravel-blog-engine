@@ -2,12 +2,6 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\CreateBlogCategory;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\EditBlogCategory;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\ListBlogCategories;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Schemas\BlogCategoryForm;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Tables\BlogCategoriesTable;
-use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,6 +9,12 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\CreateBlogCategory;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\EditBlogCategory;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages\ListBlogCategories;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Schemas\BlogCategoryForm;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Tables\BlogCategoriesTable;
+use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
 
 class BlogCategoryResource extends Resource
 {

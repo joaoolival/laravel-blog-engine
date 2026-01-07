@@ -2,12 +2,6 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\CreateBlogAuthor;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\EditBlogAuthor;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\ListBlogAuthors;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Schemas\BlogAuthorForm;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Tables\BlogAuthorsTable;
-use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,6 +9,12 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\CreateBlogAuthor;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\EditBlogAuthor;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages\ListBlogAuthors;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Schemas\BlogAuthorForm;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Tables\BlogAuthorsTable;
+use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
 
 class BlogAuthorResource extends Resource
 {

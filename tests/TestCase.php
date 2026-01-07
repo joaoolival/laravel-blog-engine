@@ -3,8 +3,8 @@
 namespace Joaoolival\LaravelBlogEngine\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Joaoolival\LaravelBlogEngine\LaravelBlogEngineServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {

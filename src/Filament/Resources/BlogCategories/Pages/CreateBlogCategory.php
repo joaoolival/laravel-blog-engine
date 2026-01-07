@@ -2,8 +2,8 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 use Filament\Resources\Pages\CreateRecord;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 
 class CreateBlogCategory extends CreateRecord
 {

@@ -46,15 +46,16 @@ class BlogPostsTable
                     ->label('Status')
                     ->badge()
                     ->getStateUsing(function ($record): string {
-                        if (!$record->is_visible || !$record->published_at) {
+                        if (! $record->is_visible || ! $record->published_at) {
                             return 'Draft';
                         }
                         if ($record->published_at->isFuture()) {
                             return 'Scheduled';
                         }
+
                         return 'Published';
                     })
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'Published' => 'success',
                         'Scheduled' => 'info',
                         'Draft' => 'warning',

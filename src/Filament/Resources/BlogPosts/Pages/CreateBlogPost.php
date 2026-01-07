@@ -2,8 +2,8 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
 use Filament\Resources\Pages\CreateRecord;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
 
 class CreateBlogPost extends CreateRecord
 {
