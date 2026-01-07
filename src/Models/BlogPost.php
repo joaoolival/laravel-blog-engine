@@ -6,9 +6,11 @@ use Filament\Forms\Components\RichEditor\FileAttachmentProviders\SpatieMediaLibr
 use Filament\Forms\Components\RichEditor\Models\Concerns\InteractsWithRichContent;
 use Filament\Forms\Components\RichEditor\Models\Contracts\HasRichContent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joaoolival\LaravelBlogEngine\Database\Factories\BlogPostFactory;
 use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -30,7 +32,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class BlogPost extends Model implements HasMedia, HasRichContent
 {
-    use HasVisibility, InteractsWithMedia, InteractsWithRichContent, SoftDeletes;
+    /** @use HasFactory<BlogPostFactory> */
+    use HasFactory, HasVisibility, InteractsWithMedia, InteractsWithRichContent, SoftDeletes;
 
     protected $fillable = [
         'title',

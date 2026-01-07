@@ -2,9 +2,11 @@
 
 namespace Joaoolival\LaravelBlogEngine\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joaoolival\LaravelBlogEngine\Database\Factories\BlogAuthorFactory;
 use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -27,7 +29,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class BlogAuthor extends Model implements HasMedia
 {
-    use HasVisibility, InteractsWithMedia, SoftDeletes;
+    /** @use HasFactory<BlogAuthorFactory> */
+    use HasFactory, HasVisibility, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = [
         'name',
