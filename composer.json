@@ -68,7 +68,7 @@
                 "Joaoolival\\LaravelBlogEngine\\LaravelBlogEngineServiceProvider"
             ],
             "aliases": {
-                "LaravelBlogEngine": "Joaoolival\\LaravelBlogEngine\\Facades\\LaravelBlogEngine"
+                "Blog": "Joaoolival\\LaravelBlogEngine\\Facades\\Blog"
             }
         }
     },

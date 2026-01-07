@@ -3,194 +3,234 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/joaoolival/laravel-blog-engine.svg?style=flat-square)](https://packagist.org/packages/joaoolival/laravel-blog-engine)
 [![Total Downloads](https://img.shields.io/packagist/dt/joaoolival/laravel-blog-engine.svg?style=flat-square)](https://packagist.org/packages/joaoolival/laravel-blog-engine)
 
-A powerful, feature-rich blog engine for Laravel applications with a beautiful Filament admin panel. Manage posts, authors, and categories with ease.
-
-## Features
-
--   📝 **Full Blog Management** - Create, edit, and publish blog posts with a rich text editor
--   👥 **Author Profiles** - Manage multiple authors with social media links and bios
--   🏷️ **Categories** - Organize posts with categories
--   🖼️ **Media Management** - Built-in image handling with Spatie Media Library
--   📱 **Responsive Images** - Automatic image optimization for better SEO and performance
--   🎨 **Filament Integration** - Beautiful admin interface powered by Filament
-
-## Requirements
-
--   PHP 8.4+
--   Laravel 11.x or 12.x
--   Filament 4.x
+A powerful blog engine for Laravel with Filament admin panel integration. Manage posts, authors, and categories with a beautiful admin interface, and query your content using a clean Facade API.
 
 ## Installation
 
-Install the package via composer:
+You can install the package via composer:
 
 ```bash
 composer require joaoolival/laravel-blog-engine
 ```
 
-Run the install command:
+Then run the install command:
 
 ```bash
 php artisan blog-engine:install
 ```
 
-The installer will guide you through publishing migrations, running them, setting up Filament, and optionally creating an admin user.
+This will publish and run migrations, set up Filament, and optionally create an admin user.
 
-### Storage Link
-
-To display uploaded images correctly, create the storage symbolic link:
+Finally, create the storage symbolic link for images:
 
 ```bash
 php artisan storage:link
 ```
 
-## Models
+## Basic Usage
 
-The package provides three Eloquent models that you can use directly in your application.
+The package provides a `Blog` facade for querying your content:
+
+```php
+use Joaoolival\LaravelBlogEngine\Facades\Blog;
+
+// Get all published posts
+$posts = Blog::getPublishedPosts();
+
+// Get paginated published posts
+$posts = Blog::getPublishedPosts(perPage: 12);
+
+// Get a single post by slug
+$post = Blog::getPostBySlug('my-first-post');
+
+// Get all visible authors
+$authors = Blog::getAllAuthors();
+
+// Get all visible categories
+$categories = Blog::getAllCategories();
+
+// Get author with all their posts
+$data = Blog::getAuthorWithPosts('john-doe');
+// $data['author'], $data['posts']
+
+// Get author with paginated posts
+$data = Blog::getAuthorWithPosts('john-doe', perPage: 12);
+```
+
+## Using with Inertia/API
+
+The package includes API Resources for JSON transformation:
+
+```php
+use Joaoolival\LaravelBlogEngine\Facades\Blog;
+use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostCollection;
+use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostResource;
+
+class PostController extends Controller
+{
+    public function index()
+    {
+        return Inertia::render('Blog/Index', [
+            'posts' => new BlogPostCollection(Blog::getPublishedPosts(perPage: 12)),
+        ]);
+    }
+
+    public function show(string $slug)
+    {
+        return Inertia::render('Blog/Show', [
+            'post' => new BlogPostResource(Blog::getPostBySlug($slug)),
+        ]);
+    }
+}
+```
+
+## Facade Methods
+
+| Method                                                     | Returns                 | Description                                     |
+| ---------------------------------------------------------- | ----------------------- | ----------------------------------------------- |
+| `getPublishedPosts(?int $perPage = null)`                  | `Paginator\|Collection` | Published posts (paginated if perPage provided) |
+| `getPostBySlug(string $slug)`                              | `BlogPost`              | Single post by slug                             |
+| `getAllAuthors()`                                          | `Collection`            | All visible authors                             |
+| `getAuthorWithPosts(string $slug, ?int $perPage = null)`   | `array`                 | Author + posts                                  |
+| `getAllCategories()`                                       | `Collection`            | All visible categories                          |
+| `getCategoryWithPosts(string $slug, ?int $perPage = null)` | `array`                 | Category + posts                                |
+
+> **Note:** When `perPage` is `null`, all results are returned as a Collection. When `perPage` is provided, results are paginated.
+
+## Using Actions
+
+For dependency injection or testing, use Actions directly:
+
+```php
+use Joaoolival\LaravelBlogEngine\Actions\Posts\GetPublishedPostsAction;
+
+class PostController extends Controller
+{
+    public function index(GetPublishedPostsAction $action)
+    {
+        $posts = $action->handle(perPage: 12);
+        // ...
+    }
+}
+```
+
+Available Actions:
+
+-   `Actions\Posts\GetPublishedPostsAction`
+-   `Actions\Posts\GetPostBySlugAction`
+-   `Actions\Authors\GetAllAuthorsAction`
+-   `Actions\Authors\GetAuthorWithPostsAction`
+-   `Actions\Categories\GetAllCategoriesAction`
+-   `Actions\Categories\GetCategoryWithPostsAction`
+
+## API Resources
+
+Resources automatically handle responsive images and WebP conversion:
+
+```php
+use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostResource;
+use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostCollection;
+use Joaoolival\LaravelBlogEngine\Http\Resources\Authors\BlogAuthorResource;
+use Joaoolival\LaravelBlogEngine\Http\Resources\Categories\BlogCategoryResource;
+```
+
+The `BlogPostResource` includes:
+
+-   Rendered content with resolved image URLs
+-   WebP images with srcset for responsive loading
+-   Banner image and gallery
+-   Nested author and category data
+
+## Models
 
 ### BlogPost
 
 ```php
 use Joaoolival\LaravelBlogEngine\Models\BlogPost;
+
+// Scopes
+BlogPost::whereIsPublished()->get();  // Published and visible
+BlogPost::whereIsDraft()->get();       // Not yet published
+BlogPost::whereIsVisible()->get();     // Visible posts
+
+// Relationships
+$post->author;    // BlogAuthor
+$post->category;  // BlogCategory
+
+// Media
+$post->getFirstMediaUrl('gallery', 'webp');
 ```
 
-| Attribute          | Type           | Description                   |
-| ------------------ | -------------- | ----------------------------- |
-| `id`               | `int`          | Primary key                   |
-| `title`            | `string`       | Post title                    |
-| `slug`             | `string`       | URL-friendly slug (unique)    |
-| `excerpt`          | `string\|null` | Short summary                 |
-| `content`          | `string\|null` | Full post content (rich text) |
-| `tags`             | `array\|null`  | JSON array of tags            |
-| `is_visible`       | `bool`         | Visibility status             |
-| `published_at`     | `Carbon\|null` | Publish date/time             |
-| `blog_author_id`   | `int\|null`    | Foreign key to author         |
-| `blog_category_id` | `int\|null`    | Foreign key to category       |
-
-**Relationships:**
-
--   `author()` → `BelongsTo` BlogAuthor
--   `category()` → `BelongsTo` BlogCategory
-
-**Scopes:**
-
-```php
-// Get only published posts (visible + published_at <= now)
-BlogPost::whereIsPublished()->get();
-
-// Get draft posts (not published yet)
-BlogPost::whereIsDraft()->get();
-
-// Get visible posts
-BlogPost::whereIsVisible()->get();
-```
-
-**Media Collections:**
-
--   `gallery` - Post images
--   `content-attachments` - Rich editor attachments
+| Attribute      | Type           | Description        |
+| -------------- | -------------- | ------------------ |
+| `title`        | `string`       | Post title         |
+| `slug`         | `string`       | URL-friendly slug  |
+| `excerpt`      | `string\|null` | Short summary      |
+| `content`      | `string\|null` | Rich text content  |
+| `tags`         | `array\|null`  | JSON array of tags |
+| `is_visible`   | `bool`         | Visibility status  |
+| `published_at` | `Carbon\|null` | Publish date       |
 
 ### BlogAuthor
 
 ```php
 use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
+
+$author->posts;  // HasMany BlogPost
+$author->getFirstMediaUrl('avatar', 'webp');
 ```
 
-| Attribute          | Type           | Description           |
-| ------------------ | -------------- | --------------------- |
-| `id`               | `int`          | Primary key           |
-| `name`             | `string`       | Author name           |
-| `slug`             | `string\|null` | URL-friendly slug     |
-| `email`            | `string`       | Author email (unique) |
-| `bio`              | `string\|null` | Author biography      |
-| `is_visible`       | `bool`         | Visibility status     |
-| `github_handle`    | `string\|null` | GitHub username       |
-| `twitter_handle`   | `string\|null` | Twitter/X username    |
-| `linkedin_handle`  | `string\|null` | LinkedIn username     |
-| `instagram_handle` | `string\|null` | Instagram username    |
-| `facebook_handle`  | `string\|null` | Facebook username     |
-
-**Relationships:**
-
--   `posts()` → `HasMany` BlogPost
-
-**Media Collections:**
-
--   `avatar` - Author profile picture (single file)
+| Attribute        | Type           | Description       |
+| ---------------- | -------------- | ----------------- |
+| `name`           | `string`       | Author name       |
+| `slug`           | `string`       | URL-friendly slug |
+| `email`          | `string`       | Author email      |
+| `bio`            | `string\|null` | Biography         |
+| `github_handle`  | `string\|null` | GitHub username   |
+| `twitter_handle` | `string\|null` | Twitter username  |
 
 ### BlogCategory
 
 ```php
 use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
+
+$category->posts;  // HasMany BlogPost
+$category->getFirstMediaUrl('banner_image', 'webp');
 ```
 
-| Attribute         | Type           | Description                |
-| ----------------- | -------------- | -------------------------- |
-| `id`              | `int`          | Primary key                |
-| `name`            | `string`       | Category name              |
-| `slug`            | `string`       | URL-friendly slug (unique) |
-| `description`     | `string\|null` | Category description       |
-| `is_visible`      | `bool`         | Visibility status          |
-| `seo_title`       | `string\|null` | SEO meta title             |
-| `seo_description` | `string\|null` | SEO meta description       |
+| Attribute         | Type           | Description          |
+| ----------------- | -------------- | -------------------- |
+| `name`            | `string`       | Category name        |
+| `slug`            | `string`       | URL-friendly slug    |
+| `description`     | `string\|null` | Description          |
+| `is_visible`      | `bool`         | Visibility status    |
+| `seo_title`       | `string\|null` | SEO meta title       |
+| `seo_description` | `string\|null` | SEO meta description |
 
-**Relationships:**
+## Admin Panel
 
--   `posts()` → `HasMany` BlogPost
+After installation, access the Filament admin at `/admin`:
 
-**Media Collections:**
+| Resource   | URL                      |
+| ---------- | ------------------------ |
+| Posts      | `/admin/blog-posts`      |
+| Authors    | `/admin/blog-authors`    |
+| Categories | `/admin/blog-categories` |
 
--   `banner_image` - Category banner (single file)
-
-## Query Examples
+To manually register the plugin:
 
 ```php
-use Joaoolival\LaravelBlogEngine\Models\BlogPost;
-use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
-use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
+use Joaoolival\LaravelBlogEngine\BlogPlugin;
 
-// Get all published posts with author and category
-$posts = BlogPost::whereIsPublished()
-    ->with(['author', 'category'])
-    ->latest('published_at')
-    ->get();
-
-// Get a post by slug
-$post = BlogPost::where('slug', 'my-post-slug')
-    ->whereIsPublished()
-    ->firstOrFail();
-
-// Get posts by category
-$category = BlogCategory::where('slug', 'tutorials')->first();
-$posts = $category->posts()->whereIsPublished()->get();
-
-// Get posts by author
-$author = BlogAuthor::where('slug', 'john-doe')->first();
-$posts = $author->posts()->whereIsPublished()->get();
-
-// Get all visible categories with post count
-$categories = BlogCategory::whereIsVisible()
-    ->withCount(['posts' => fn($q) => $q->whereIsPublished()])
-    ->get();
-
-// Get featured image from post gallery
-$post = BlogPost::find(1);
-$featuredImage = $post->getFirstMediaUrl('gallery', 'webp');
-
-// Get author avatar
-$author = BlogAuthor::find(1);
-$avatarUrl = $author->getFirstMediaUrl('avatar', 'webp');
+public function panel(Panel $panel): Panel
+{
+    return $panel->plugin(BlogPlugin::make());
+}
 ```
 
-## Responsive Images & SEO
+## Responsive Images
 
-This package uses [Spatie Media Library](https://spatie.be/docs/laravel-medialibrary) for media management. When you have [Laravel Horizon](https://laravel.com/docs/horizon) configured, the package will automatically generate responsive image variants in the background. This provides:
-
--   **Faster page loads** - Appropriately sized images for each device
--   **Better SEO scores** - Optimized images improve Core Web Vitals
--   **Reduced bandwidth** - Smaller images for mobile users
-
-To enable background processing:
+This package uses [Spatie Media Library](https://spatie.be/docs/laravel-medialibrary) for automatic image optimization. With [Laravel Horizon](https://laravel.com/docs/horizon), responsive variants are generated in the background:
 
 ```bash
 composer require laravel/horizon
@@ -198,35 +238,9 @@ php artisan horizon:install
 php artisan horizon
 ```
 
-## Admin Panel
-
-After installation, access the admin at `/admin`:
-
-| Resource   | URL                      |
-| ---------- | ------------------------ |
-| Dashboard  | `/admin`                 |
-| Blog Posts | `/admin/blog-posts`      |
-| Authors    | `/admin/blog-authors`    |
-| Categories | `/admin/blog-categories` |
-
-### Manual Plugin Registration
-
-If needed, manually register the plugin in your panel provider:
-
-```php
-use Joaoolival\LaravelBlogEngine\BlogPlugin;
-
-public function panel(Panel $panel): Panel
-{
-    return $panel
-        // ...
-        ->plugin(BlogPlugin::make());
-}
-```
-
 ## Configuration
 
-Publish the configuration file:
+Publish the configuration:
 
 ```bash
 php artisan vendor:publish --tag="laravel-blog-engine-config"
