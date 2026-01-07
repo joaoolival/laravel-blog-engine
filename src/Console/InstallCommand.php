@@ -44,7 +44,7 @@ class InstallCommand extends Command
 
     protected function createFilamentUser(): void
     {
-        if (!confirm('Would you like to create a Filament admin user?', default: false)) {
+        if (! confirm('Would you like to create a Filament admin user?', default: false)) {
             return;
         }
 
@@ -53,7 +53,7 @@ class InstallCommand extends Command
 
     protected function upgradeFilamentAssets(): void
     {
-        if (!confirm('Would you like to publish/refresh Filament assets?', default: true)) {
+        if (! confirm('Would you like to publish/refresh Filament assets?', default: true)) {
             $this->components->warn('Skipping Filament assets. Run later with: php artisan filament:upgrade');
 
             return;
@@ -99,7 +99,7 @@ class InstallCommand extends Command
             return;
         }
 
-        if (!confirm('Would you like to run the migrations now?', default: true)) {
+        if (! confirm('Would you like to run the migrations now?', default: true)) {
             $this->components->warn('Skipping migrations. Run them later with: php artisan migrate');
 
             return;
@@ -114,7 +114,7 @@ class InstallCommand extends Command
     {
         $panelProviderPath = $this->findPanelProvider();
 
-        if (!$panelProviderPath) {
+        if (! $panelProviderPath) {
             if (confirm('No Filament panel found. Would you like to create one?', default: true)) {
                 $this->createFilamentPanel();
                 $panelProviderPath = $this->findPanelProvider();
@@ -132,7 +132,7 @@ class InstallCommand extends Command
     {
         $providersPath = app_path('Providers/Filament');
 
-        if (!is_dir($providersPath)) {
+        if (! is_dir($providersPath)) {
             return null;
         }
 
@@ -144,7 +144,7 @@ class InstallCommand extends Command
     protected function createFilamentPanel(): void
     {
         $this->components->task('Creating Filament admin panel', function () {
-            if (!File::isDirectory(app_path('Providers/Filament'))) {
+            if (! File::isDirectory(app_path('Providers/Filament'))) {
                 File::makeDirectory(app_path('Providers/Filament'), 0755, true);
             }
 
@@ -158,9 +158,9 @@ class InstallCommand extends Command
         $modified = false;
 
         // Add use statement if not present
-        $useStatement = 'use ' . BlogPlugin::class . ';';
+        $useStatement = 'use '.BlogPlugin::class.';';
 
-        if (!str_contains($contents, $useStatement)) {
+        if (! str_contains($contents, $useStatement)) {
             $contents = preg_replace(
                 '/(use Filament\\\\PanelProvider;)/',
                 "$1\n{$useStatement}",
@@ -170,7 +170,7 @@ class InstallCommand extends Command
         }
 
         // Register plugin if not present
-        if (!str_contains($contents, 'BlogPlugin::make()') && !str_contains($contents, 'new BlogPlugin()')) {
+        if (! str_contains($contents, 'BlogPlugin::make()') && ! str_contains($contents, 'new BlogPlugin()')) {
             $patterns = [
                 '/(->\s*authMiddleware\s*\(\s*\[)/' => "->plugin(BlogPlugin::make())\n            \$1",
                 '/(->\s*plugins\s*\(\s*\[)/' => "\$1\n                BlogPlugin::make(),",
@@ -187,7 +187,7 @@ class InstallCommand extends Command
 
         if ($modified) {
             File::put($filePath, $contents);
-            $this->components->task('Registering BlogPlugin in ' . basename($filePath), fn() => true);
+            $this->components->task('Registering BlogPlugin in '.basename($filePath), fn () => true);
         } else {
             $this->components->twoColumnDetail(
                 'BlogPlugin registration',

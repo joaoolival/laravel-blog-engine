@@ -2,9 +2,9 @@
 
 namespace Joaoolival\LaravelBlogEngine;
 
+use Joaoolival\LaravelBlogEngine\Console\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Joaoolival\LaravelBlogEngine\Console\InstallCommand;
 
 class LaravelBlogEngineServiceProvider extends PackageServiceProvider
 {
@@ -17,7 +17,7 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-blog-engine')
-            ->setBasePath(__DIR__ . '/../')
+            ->setBasePath(__DIR__.'/../')
             ->hasConfigFile()
             ->hasViews()
             ->hasCommand(InstallCommand::class);
@@ -27,7 +27,7 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
     {
         // Manually publish migrations to avoid issues with hasMigrations() magic
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'laravel-blog-engine-migrations');
 
     }

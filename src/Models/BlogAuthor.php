@@ -2,10 +2,10 @@
 
 namespace Joaoolival\LaravelBlogEngine\Models;
 
-use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 

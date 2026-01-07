@@ -2,11 +2,11 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\Pages;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 
 class EditBlogCategory extends EditRecord
 {

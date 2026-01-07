@@ -2,9 +2,9 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\Pages;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\BlogAuthorResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\BlogAuthorResource;
 
 class ListBlogAuthors extends ListRecords
 {

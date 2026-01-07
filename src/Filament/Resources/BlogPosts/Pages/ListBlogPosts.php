@@ -2,9 +2,9 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
 
 class ListBlogPosts extends ListRecords
 {

@@ -2,12 +2,6 @@
 
 namespace Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts;
 
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\CreateBlogPost;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\EditBlogPost;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\ListBlogPosts;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Schemas\BlogPostForm;
-use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Tables\BlogPostsTable;
-use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,6 +9,12 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\CreateBlogPost;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\EditBlogPost;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Pages\ListBlogPosts;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Schemas\BlogPostForm;
+use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\Tables\BlogPostsTable;
+use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 
 class BlogPostResource extends Resource
 {
