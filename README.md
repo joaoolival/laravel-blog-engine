@@ -5,6 +5,11 @@
 
 A powerful blog engine for Laravel with Filament admin panel integration. Manage posts, authors, and categories with a beautiful admin interface, and query your content using a clean Facade API.
 
+## Requirements
+
+-   PHP 8.3+
+-   Laravel 12.0+
+
 ## Installation
 
 You can install the package via composer:
