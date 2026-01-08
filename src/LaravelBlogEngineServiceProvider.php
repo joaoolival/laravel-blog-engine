@@ -17,9 +17,7 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-blog-engine')
-            ->setBasePath(__DIR__.'/../')
-            ->hasConfigFile()
-            ->hasViews()
+            ->hasConfigFile('laravel-blog-engine')
             ->hasCommand(InstallCommand::class);
     }
 
