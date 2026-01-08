@@ -33,7 +33,7 @@ $categories = Blog::getAllCategories();
 
 ## Content & Responsive Images
 
-Post content is stored as Tiptap JSON. When building APIs, use the provided HTTP Resources to automatically render content with responsive images:
+Post content is stored as an HTML string (database `longtext`). When building APIs, use the provided HTTP Resources to automatically render content with responsive images:
 
 ```php
 use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostResource;
@@ -41,13 +41,13 @@ use Joaoolival\LaravelBlogEngine\Http\Resources\Posts\BlogPostResource;
 return new BlogPostResource($post);
 ```
 
-The resource transforms `content` into rendered HTML with:
+The resource transforms the `content` HTML, finding image tags with `data-id` and replacing them with:
 
 -   WebP conversion
 -   `srcset` attributes for responsive loading
 -   Lazy loading and async decoding
 
-> **Note:** Accessing `$post->content` directly returns raw Tiptap JSON. Use `BlogPostResource` for rendered HTML with responsive images.
+> **Note:** Accessing `$post->content` directly returns the raw HTML with custom attributes. Use `BlogPostResource` for fully rendered HTML with responsive images.
 
 ## Facade Methods
 
@@ -67,15 +67,15 @@ The resource transforms `content` into rendered HTML with:
 
 ### BlogPost
 
-| Attribute      | Type           | Description             |
-| -------------- | -------------- | ----------------------- |
-| `title`        | `string`       | Post title              |
-| `slug`         | `string`       | URL-friendly identifier |
-| `excerpt`      | `string\|null` | Short summary           |
-| `content`      | `string\|null` | Tiptap JSON content     |
-| `tags`         | `array\|null`  | Post tags               |
-| `is_visible`   | `bool`         | Visibility flag         |
-| `published_at` | `Carbon\|null` | Publish date            |
+| Attribute      | Type     | Description             |
+| -------------- | -------- | ----------------------- | ----------------------- |
+| `title`        | `string` | Post title              |
+| `slug`         | `string` | URL-friendly identifier |
+| `excerpt`      | `string  | null`                   | Short summary           |
+| `content`      | `string  | null`                   | HTML content (longtext) |
+| `tags`         | `array   | null`                   | Post tags               |
+| `is_visible`   | `bool`   | Visibility flag         |
+| `published_at` | `Carbon  | null`                   | Publish date            |
 
 **Scopes:**
 

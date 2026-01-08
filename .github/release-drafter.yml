@@ -9,10 +9,13 @@ categories:
     labels:
       - "fix"
       - "bug"
+  - title: "📚 Documentation"
+    labels:
+      - "documentation"
+      - "docs"
   - title: "🧰 Maintenance"
     labels:
       - "chore"
-      - "documentation"
       - "style"
       - "refactor"
       - "test"
@@ -21,3 +24,26 @@ template: |
   ## What's Changed
 
   $CHANGES
+
+version-resolver:
+  major:
+    labels:
+      - "major"
+      - "breaking"
+  minor:
+    labels:
+      - "minor"
+      - "enhancement"
+      - "feature"
+  patch:
+    labels:
+      - "patch"
+      - "bug"
+      - "fix"
+      - "chore"
+      - "documentation"
+      - "docs"
+      - "style"
+      - "refactor"
+      - "test"
+  default: patch
