@@ -20,16 +20,15 @@ This guide explains everything you need to know to maintain this package profess
 
 All configuration files are correctly set up. Here is what each one does:
 
-| File                            | Purpose                                                         | When it runs                      |
-| ------------------------------- | --------------------------------------------------------------- | --------------------------------- |
-| `run-tests.yml`                 | Runs your Pest test suite on PHP 8.3 & 8.4, Ubuntu & Windows    | When any `.php` file changes      |
-| `phpstan.yml`                   | Runs static analysis (PHPStan) to catch type errors             | When any `.php` file changes      |
-| `fix-php-code-style-issues.yml` | Auto-formats your code with Laravel Pint                        | When any `.php` file changes      |
-| `dependabot-auto-merge.yml`     | Auto-merges safe Dependabot PRs (patch/minor updates)           | When Dependabot opens a PR        |
-| `update-changelog.yml`          | Updates `CHANGELOG.md` automatically when you publish a release | When you publish a GitHub Release |
-| `dependabot.yml`                | Configures Dependabot to check for updates weekly               | Weekly (automatic)                |
-| `FUNDING.yml`                   | Enables the "Sponsor" button on GitHub                          | Always visible                    |
-| `ISSUE_TEMPLATE/`               | Provides structured forms for bug reports                       | When someone opens an issue       |
+| File                            | Purpose                                                      | When it runs                 |
+| ------------------------------- | ------------------------------------------------------------ | ---------------------------- |
+| `run-tests.yml`                 | Runs your Pest test suite on PHP 8.3 & 8.4, Ubuntu & Windows | When any `.php` file changes |
+| `phpstan.yml`                   | Runs static analysis (PHPStan) to catch type errors          | When any `.php` file changes |
+| `fix-php-code-style-issues.yml` | Auto-formats your code with Laravel Pint                     | When any `.php` file changes |
+| `dependabot-auto-merge.yml`     | Auto-merges safe Dependabot PRs (patch/minor updates)        | When Dependabot opens a PR   |
+| `dependabot.yml`                | Configures Dependabot to check for updates weekly            | Weekly (automatic)           |
+| `FUNDING.yml`                   | Enables the "Sponsor" button on GitHub                       | Always visible               |
+| `ISSUE_TEMPLATE/`               | Provides structured forms for bug reports                    | When someone opens an issue  |
 
 ---
 
@@ -102,8 +101,6 @@ git push origin v1.0.2
 2. Select your tag (`v1.0.2`).
 3. Click **"Generate release notes"**.
 4. Click **Publish release**.
-
-**Note:** The `update-changelog.yml` workflow will automatically update your `CHANGELOG.md` file after you publish.
 
 ---
 
