@@ -134,6 +134,10 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 -   [João Olival](https://github.com/joaoolival)
 
+## Support
+
+If you encounter any issues or have questions, please [open an issue](https://github.com/joaoolival/laravel-blog-engine/issues) on GitHub.
+
 ## License
 
 MIT. See [LICENSE.md](LICENSE.md).
