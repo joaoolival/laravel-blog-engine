@@ -10,6 +10,9 @@ use Joaoolival\LaravelBlogEngine\Actions\Categories\GetAllCategoriesAction;
 use Joaoolival\LaravelBlogEngine\Actions\Categories\GetCategoryWithPostsAction;
 use Joaoolival\LaravelBlogEngine\Actions\Posts\GetPostBySlugAction;
 use Joaoolival\LaravelBlogEngine\Actions\Posts\GetPublishedPostsAction;
+use Joaoolival\LaravelBlogEngine\Actions\Posts\GetRecentPostsAction;
+use Joaoolival\LaravelBlogEngine\Actions\Posts\GetRelatedPostsAction;
+use Joaoolival\LaravelBlogEngine\Actions\Posts\SearchPostsAction;
 use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
 use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
 use Joaoolival\LaravelBlogEngine\Models\BlogPost;
@@ -33,6 +36,36 @@ class BlogService
     public function getPostBySlug(string $slug): BlogPost
     {
         return app(GetPostBySlugAction::class)->handle($slug);
+    }
+
+    /**
+     * Get the most recent published posts.
+     *
+     * @return Collection<int, BlogPost>
+     */
+    public function getRecentPosts(int $limit = 5): Collection
+    {
+        return app(GetRecentPostsAction::class)->handle($limit);
+    }
+
+    /**
+     * Get posts related to the given post (same category or matching tags).
+     *
+     * @return Collection<int, BlogPost>
+     */
+    public function getRelatedPosts(BlogPost $post, int $limit = 4): Collection
+    {
+        return app(GetRelatedPostsAction::class)->handle($post, $limit);
+    }
+
+    /**
+     * Search published posts by title, excerpt, or content.
+     *
+     * @return LengthAwarePaginator<int, BlogPost>|Collection<int, BlogPost>
+     */
+    public function searchPosts(string $query, ?int $perPage = null): LengthAwarePaginator|Collection
+    {
+        return app(SearchPostsAction::class)->handle($query, $perPage);
     }
 
     /**

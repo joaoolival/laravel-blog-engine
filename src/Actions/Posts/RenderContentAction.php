@@ -4,7 +4,7 @@ namespace Joaoolival\LaravelBlogEngine\Actions\Posts;
 
 use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 
-final readonly class RegenerateRenderedContentAction
+final readonly class RenderContentAction
 {
     /**
      * Generate rendered HTML content with responsive images.
@@ -36,6 +36,10 @@ final readonly class RegenerateRenderedContentAction
      */
     private function makeContentImagesResponsive(BlogPost $post, string $html): string
     {
+        // Force refresh media to ensure we have latest responsive images data
+        // This is crucial when running in sync queue or tight loops where the relation is stale
+        $post->load('media');
+
         // Get all content attachment media
         $contentMedia = $post->getMedia('content-attachments');
 

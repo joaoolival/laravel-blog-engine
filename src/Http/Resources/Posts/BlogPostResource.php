@@ -4,6 +4,7 @@ namespace Joaoolival\LaravelBlogEngine\Http\Resources\Posts;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Joaoolival\LaravelBlogEngine\Actions\Posts\RenderContentAction;
 use Joaoolival\LaravelBlogEngine\Http\Resources\Authors\BlogAuthorResource;
 use Joaoolival\LaravelBlogEngine\Http\Resources\Categories\BlogCategoryResource;
 use Joaoolival\LaravelBlogEngine\Models\BlogPost;
@@ -28,7 +29,7 @@ class BlogPostResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'excerpt' => $this->excerpt,
-            'content' => $this->rendered_content ?: $this->content,
+            'content' => (new RenderContentAction)->handle($this->resource),
             'published_at' => $this->published_at,
             'author' => new BlogAuthorResource($this->whenLoaded('author')),
             'category' => new BlogCategoryResource($this->whenLoaded('category')),

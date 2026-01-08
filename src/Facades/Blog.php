@@ -13,6 +13,9 @@ use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 /**
  * @method static LengthAwarePaginator<int, BlogPost>|Collection<int, BlogPost> getPublishedPosts(?int $perPage = null)
  * @method static BlogPost getPostBySlug(string $slug)
+ * @method static Collection<int, BlogPost> getRecentPosts(int $limit = 5)
+ * @method static Collection<int, BlogPost> getRelatedPosts(BlogPost $post, int $limit = 4)
+ * @method static LengthAwarePaginator<int, BlogPost>|Collection<int, BlogPost> searchPosts(string $query, ?int $perPage = null)
  * @method static Collection<int, BlogAuthor> getAllAuthors()
  * @method static array{author: BlogAuthor, posts: LengthAwarePaginator<int, BlogPost>|Collection<int, BlogPost>} getAuthorWithPosts(string $slug, ?int $perPage = null)
  * @method static Collection<int, BlogCategory> getAllCategories()

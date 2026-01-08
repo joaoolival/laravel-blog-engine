@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->text('excerpt')->nullable();
             $table->longText('content')->nullable();
-            $table->longText('rendered_content')->nullable();
             $table->json('tags')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->foreignId('blog_author_id')->nullable()->constrained('blog_authors')->nullOnDelete();

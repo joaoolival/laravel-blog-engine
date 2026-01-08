@@ -28,12 +28,6 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        // Register event listener for media conversions
-        \Illuminate\Support\Facades\Event::listen(
-            \Spatie\MediaLibrary\ResponsiveImages\Events\ResponsiveImagesGeneratedEvent::class,
-            \Joaoolival\LaravelBlogEngine\Listeners\RegenerateBlogPostContent::class
-        );
-
         // Manually publish migrations to avoid issues with hasMigrations() magic
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),

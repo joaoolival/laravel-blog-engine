@@ -116,37 +116,38 @@ describe('Model', function () {
         expect($post->published_at)->toBeInstanceOf(Carbon::class);
     });
 
-    it('can regenerate rendered content', function () {
+    it('can render content with RenderContentAction', function () {
         $post = BlogPost::factory()->create([
             'content' => '<p>Test content</p>',
         ]);
 
-        expect($post->rendered_content)->toBeNull();
+        $action = new \Joaoolival\LaravelBlogEngine\Actions\Posts\RenderContentAction;
+        $rendered = $action->handle($post);
 
-        $post->regenerateRenderedContent();
-
-        expect($post->rendered_content)->not->toBeNull()
-            ->and($post->rendered_content)->toContain('Test content');
+        expect($rendered)->not->toBeNull()
+            ->and($rendered)->toContain('Test content');
     });
 
-    it('sets rendered content to null when content is null', function () {
+    it('returns null when content is null', function () {
         $post = BlogPost::factory()->create(['content' => null]);
 
-        $post->regenerateRenderedContent();
+        $action = new \Joaoolival\LaravelBlogEngine\Actions\Posts\RenderContentAction;
+        $rendered = $action->handle($post);
 
-        expect($post->rendered_content)->toBeNull();
+        expect($rendered)->toBeNull();
     });
 
-    it('handles rendered content in tests without Str sanitizeHtml', function () {
-        // This test verifies the try-catch in RegenerateRenderedContentAction works
+    it('handles content with script tags in tests', function () {
+        // This test verifies the try-catch in RenderContentAction works
         $post = BlogPost::factory()->create([
             'content' => '<p>Content with <script>alert("test")</script></p>',
         ]);
 
-        $post->regenerateRenderedContent();
+        $action = new \Joaoolival\LaravelBlogEngine\Actions\Posts\RenderContentAction;
+        $rendered = $action->handle($post);
 
-        // Should return raw content when Str::sanitizeHtml doesn't exist
-        expect($post->rendered_content)->not->toBeNull();
+        // Should return content (raw or sanitized depending on environment)
+        expect($rendered)->not->toBeNull();
     });
 });
 
@@ -231,6 +232,62 @@ describe('Facade', function () {
 
             expect($result->relationLoaded('author'))->toBeTrue()
                 ->and($result->relationLoaded('category'))->toBeTrue();
+        });
+    });
+
+    describe('getRecentPosts', function () {
+        it('returns most recent published posts', function () {
+            BlogPost::factory()->published()->count(10)->create();
+
+            $posts = Blog::getRecentPosts(5);
+
+            expect($posts)->toBeInstanceOf(Collection::class)
+                ->and($posts)->toHaveCount(5);
+        });
+
+        it('orders by published_at descending', function () {
+            $older = BlogPost::factory()->published()->create(['published_at' => now()->subDays(5)]);
+            $newer = BlogPost::factory()->published()->create(['published_at' => now()->subDay()]);
+
+            $posts = Blog::getRecentPosts(2);
+
+            expect($posts->first()->id)->toBe($newer->id);
+        });
+    });
+
+    describe('getRelatedPosts', function () {
+        it('returns posts from same category', function () {
+            $category = BlogCategory::factory()->create();
+            $post = BlogPost::factory()->published()->forCategory($category)->create();
+            $related = BlogPost::factory()->published()->forCategory($category)->count(3)->create();
+            $unrelated = BlogPost::factory()->published()->create();
+
+            $result = Blog::getRelatedPosts($post, 4);
+
+            expect($result->pluck('id'))->toContain($related->first()->id)
+                ->and($result->pluck('id'))->not->toContain($unrelated->id)
+                ->and($result->pluck('id'))->not->toContain($post->id);
+        });
+    });
+
+    describe('searchPosts', function () {
+        it('searches by title', function () {
+            BlogPost::factory()->published()->create(['title' => 'Laravel Tutorial']);
+            BlogPost::factory()->published()->create(['title' => 'Vue.js Guide']);
+
+            $results = Blog::searchPosts('Laravel');
+
+            expect($results)->toHaveCount(1)
+                ->and($results->first()->title)->toBe('Laravel Tutorial');
+        });
+
+        it('returns paginated results when perPage is provided', function () {
+            BlogPost::factory()->published()->count(15)->create(['title' => 'Test Post']);
+
+            $results = Blog::searchPosts('Test', perPage: 10);
+
+            expect($results)->toBeInstanceOf(LengthAwarePaginator::class)
+                ->and($results->count())->toBe(10);
         });
     });
 });
