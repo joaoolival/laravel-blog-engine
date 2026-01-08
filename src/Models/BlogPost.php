@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joaoolival\LaravelBlogEngine\Actions\Posts\RegenerateRenderedContentAction;
 use Joaoolival\LaravelBlogEngine\Database\Factories\BlogPostFactory;
 use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
@@ -22,6 +23,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read string $slug
  * @property-read string|null $excerpt
  * @property-read string|null $content
+ * @property string|null $rendered_content
  * @property-read array<int, string>|null $tags
  * @property-read \Illuminate\Support\Carbon|null $published_at
  * @property-read int $blog_author_id
@@ -41,6 +43,7 @@ class BlogPost extends Model implements HasMedia, HasRichContent
         'slug',
         'excerpt',
         'content',
+        'rendered_content',
         'tags',
         'published_at',
         'blog_author_id',
@@ -107,6 +110,17 @@ class BlogPost extends Model implements HasMedia, HasRichContent
     {
         $this->addMediaCollection('gallery');
         $this->addMediaCollection('content-attachments');
+    }
+
+    /**
+     * Manually regenerate the rendered content.
+     *
+     * Useful for batch operations or when media changes.
+     */
+    public function regenerateRenderedContent(): void
+    {
+        $this->rendered_content = (new RegenerateRenderedContentAction)->handle($this);
+        $this->save();
     }
 
     public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void

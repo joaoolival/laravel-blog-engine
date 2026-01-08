@@ -13,12 +13,12 @@ use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 
 beforeEach(function () {
     // Run package migrations
-    foreach (glob(__DIR__.'/../../database/migrations/*.php') as $migration) {
+    foreach (glob(__DIR__ . '/../../database/migrations/*.php') as $migration) {
         (include $migration)->up();
     }
 
     // Run media library migration
-    $mediaLibraryMigration = __DIR__.'/../../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
+    $mediaLibraryMigration = __DIR__ . '/../../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
     if (File::exists($mediaLibraryMigration)) {
         (include $mediaLibraryMigration)->up();
     }
@@ -115,6 +115,39 @@ describe('Model', function () {
 
         expect($post->published_at)->toBeInstanceOf(Carbon::class);
     });
+
+    it('can regenerate rendered content', function () {
+        $post = BlogPost::factory()->create([
+            'content' => '<p>Test content</p>',
+        ]);
+
+        expect($post->rendered_content)->toBeNull();
+
+        $post->regenerateRenderedContent();
+
+        expect($post->rendered_content)->not->toBeNull()
+            ->and($post->rendered_content)->toContain('Test content');
+    });
+
+    it('sets rendered content to null when content is null', function () {
+        $post = BlogPost::factory()->create(['content' => null]);
+
+        $post->regenerateRenderedContent();
+
+        expect($post->rendered_content)->toBeNull();
+    });
+
+    it('handles rendered content in tests without Str sanitizeHtml', function () {
+        // This test verifies the try-catch in RegenerateRenderedContentAction works
+        $post = BlogPost::factory()->create([
+            'content' => '<p>Content with <script>alert("test")</script></p>',
+        ]);
+
+        $post->regenerateRenderedContent();
+
+        // Should return raw content when Str::sanitizeHtml doesn't exist
+        expect($post->rendered_content)->not->toBeNull();
+    });
 });
 
 describe('Facade', function () {
@@ -180,14 +213,14 @@ describe('Facade', function () {
         });
 
         it('throws exception for non-existent slug', function () {
-            expect(fn () => Blog::getPostBySlug('non-existent'))
+            expect(fn() => Blog::getPostBySlug('non-existent'))
                 ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         });
 
         it('throws exception for draft post', function () {
             BlogPost::factory()->draft()->create(['slug' => 'draft-post']);
 
-            expect(fn () => Blog::getPostBySlug('draft-post'))
+            expect(fn() => Blog::getPostBySlug('draft-post'))
                 ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         });
 
