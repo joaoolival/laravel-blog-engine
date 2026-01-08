@@ -13,12 +13,12 @@ use Joaoolival\LaravelBlogEngine\Models\BlogPost;
 
 beforeEach(function () {
     // Run package migrations
-    foreach (glob(__DIR__ . '/../../database/migrations/*.php') as $migration) {
+    foreach (glob(__DIR__.'/../../database/migrations/*.php') as $migration) {
         (include $migration)->up();
     }
 
     // Run media library migration
-    $mediaLibraryMigration = __DIR__ . '/../../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
+    $mediaLibraryMigration = __DIR__.'/../../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
     if (File::exists($mediaLibraryMigration)) {
         (include $mediaLibraryMigration)->up();
     }
@@ -213,14 +213,14 @@ describe('Facade', function () {
         });
 
         it('throws exception for non-existent slug', function () {
-            expect(fn() => Blog::getPostBySlug('non-existent'))
+            expect(fn () => Blog::getPostBySlug('non-existent'))
                 ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         });
 
         it('throws exception for draft post', function () {
             BlogPost::factory()->draft()->create(['slug' => 'draft-post']);
 
-            expect(fn() => Blog::getPostBySlug('draft-post'))
+            expect(fn () => Blog::getPostBySlug('draft-post'))
                 ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
         });
 

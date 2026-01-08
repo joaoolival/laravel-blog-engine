@@ -63,19 +63,18 @@ class PostController extends Controller
 
 ### Content Rendering Performance
 
-**Post content is automatically cached** when created/updated in Filament:
+**Post content is automatically cached** and optimized for performance:
 
--   Raw Tiptap JSON is converted to HTML with responsive images
--   Cached in `rendered_content` column for fast API responses
--   Falls back to raw `content` if cache is empty
+1.  **Initial Save:** The API returns the raw `content` (Tiptap JSON) via a fallback mechanism, ensuring content is immediately available.
+2.  **Async Optimization:** A background listener waits for Spatie Media Library to finish generating responsive images.
+3.  **Final Update:** Once images are ready, the `rendered_content` column is updated with the full HTML including WebP images and `srcset` attributes.
 
-To manually regenerate (useful for batch operations):
+This "eventual consistency" approach ensures fast writes while guaranteeing the best possible frontend experience for readers.
+
+To manually regenerate immediately (e.g., during seeding):
 
 ```php
 $post->regenerateRenderedContent();
-
-// Regenerate all posts
-BlogPost::all()->each->regenerateRenderedContent();
 ```
 
 ## Available Methods
