@@ -20,9 +20,37 @@ class BlogCategoryResource extends Resource
 {
     protected static ?string $model = BlogCategory::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function getModelLabel(): string
+    {
+        return config('laravel-blog-engine.resources.categories.label', 'Blog Category');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return config('laravel-blog-engine.resources.categories.plural_label', 'Blog Categories');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return config('laravel-blog-engine.resources.categories.navigation_label', 'Blog Categories');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return config('laravel-blog-engine.resources.categories.navigation_group', 'Blog');
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return config('laravel-blog-engine.resources.categories.navigation_sort', 3);
+    }
+
+    public static function getNavigationIcon(): string|BackedEnum|null
+    {
+        return config('laravel-blog-engine.resources.categories.navigation_icon', Heroicon::OutlinedRectangleStack);
+    }
 
     public static function form(Schema $schema): Schema
     {
