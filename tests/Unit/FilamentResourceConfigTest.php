@@ -1,9 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Config;
 use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogAuthors\BlogAuthorResource;
 use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogCategories\BlogCategoryResource;
 use Joaoolival\LaravelBlogEngine\Filament\Resources\BlogPosts\BlogPostResource;
-use Illuminate\Support\Facades\Config;
 
 it('uses configured labels and group for blog posts', function () {
     Config::set('laravel-blog-engine.resources.posts.label', 'Custom Post Label');
@@ -64,7 +64,7 @@ it('uses default values when config is missing', function () {
     expect(BlogPostResource::getNavigationGroup())->toBe('Blog');
 
     // Default icon checks
-    // We expect the Heroicon enum or string depending on implementation. 
+    // We expect the Heroicon enum or string depending on implementation.
     // In code we used `Heroicon::OutlinedRectangleStack` which is an Enum.
     // However, since we are testing the return value, it should match the default.
     // It's tricky to match Enum vs string without knowing if config helper returns enum instance or we cast it.
