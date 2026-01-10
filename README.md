@@ -20,6 +20,36 @@ php artisan blog-engine:install
 php artisan storage:link
 ```
 
+### Configuration
+
+Publish the configuration file to customize resource labels, navigation, and icons:
+
+```bash
+php artisan vendor:publish --tag="laravel-blog-engine-config"
+```
+
+You can customize the following for Posts, Authors, and Categories in `config/laravel-blog-engine.php`:
+
+-   `label` & `plural_label`: Custom names for resources.
+-   `navigation_label`: Label shown in the sidebar.
+-   `navigation_group`: Group resources under a specific sidebar group (default: "Blog").
+-   `navigation_sort`: Order in the navigation.
+-   `navigation_icon`: Heroicon name (e.g., `heroicon-o-pencil`) for the sidebar icon.
+
+### Authorization
+
+To restrict access to blog resources, simply create Policies for the models (`BlogPost`, `BlogAuthor`, `BlogCategory`). Filament will automatically detect and enforce them.
+
+This allows you to define granular permissions for who can **view**, **create**, **update**, **delete**, and **restore** resources.
+
+```bash
+php artisan make:policy BlogPostPolicy --model=\Joaoolival\LaravelBlogEngine\Models\BlogPost
+```
+
+Then register them in your application's `AuthServiceProvider` (or `AppServiceProvider` in newer Laravel versions).
+
+For more details, see the [Filament Resource Authorization documentation](https://filamentphp.com/docs/3.x/panels/resources/getting-started#authorization).
+
 ## Basic Usage
 
 ```php
@@ -67,15 +97,15 @@ The resource transforms the `content` HTML, finding image tags with `data-id` an
 
 ### BlogPost
 
-| Attribute      | Type     | Description             |
-| -------------- | -------- | ----------------------- | ----------------------- |
-| `title`        | `string` | Post title              |
-| `slug`         | `string` | URL-friendly identifier |
-| `excerpt`      | `string  | null`                   | Short summary           |
-| `content`      | `string  | null`                   | HTML content (longtext) |
-| `tags`         | `array   | null`                   | Post tags               |
-| `is_visible`   | `bool`   | Visibility flag         |
-| `published_at` | `Carbon  | null`                   | Publish date            |
+| Attribute      | Type             | Description             |
+| -------------- | ---------------- | ----------------------- |
+| `title`        | `string`         | Post title              |
+| `slug`         | `string`         | URL-friendly identifier |
+| `excerpt`      | `string \| null` | Short summary           |
+| `content`      | `string \| null` | HTML content (longtext) |
+| `tags`         | `array \| null`  | Post tags               |
+| `is_visible`   | `bool`           | Visibility flag         |
+| `published_at` | `Carbon \| null` | Publish date            |
 
 **Scopes:**
 
