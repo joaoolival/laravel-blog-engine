@@ -32,5 +32,10 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
         $this->publishes([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'laravel-blog-engine-migrations');
+
+        // Manually publish config
+        $this->publishes([
+            __DIR__.'/../config/laravel-blog-engine.php' => config_path('laravel-blog-engine.php'),
+        ], 'laravel-blog-engine-config');
     }
 }
