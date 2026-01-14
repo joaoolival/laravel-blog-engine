@@ -18,24 +18,12 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-blog-engine')
             ->hasConfigFile('laravel-blog-engine')
+            ->discoversMigrations()
             ->hasCommand(InstallCommand::class);
     }
 
     public function packageRegistered(): void
     {
         $this->app->singleton(BlogService::class);
-    }
-
-    public function packageBooted(): void
-    {
-        // Manually publish migrations to avoid issues with hasMigrations() magic
-        $this->publishes([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], 'laravel-blog-engine-migrations');
-
-        // Manually publish config
-        $this->publishes([
-            __DIR__.'/../config/laravel-blog-engine.php' => config_path('laravel-blog-engine.php'),
-        ], 'laravel-blog-engine-config');
     }
 }
