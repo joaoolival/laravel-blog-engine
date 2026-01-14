@@ -69,7 +69,7 @@ class InstallCommand extends Command
         $this->components->task('Publishing migrations', function () {
             $this->callSilently('vendor:publish', [
                 '--provider' => LaravelBlogEngineServiceProvider::class,
-                '--tag' => 'laravel-blog-engine-migrations',
+                '--tag' => 'blog-engine-migrations',
                 '--force' => $this->option('force'),
             ]);
 
