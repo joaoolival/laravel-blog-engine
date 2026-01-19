@@ -74,4 +74,20 @@ class BlogPostFactory extends Factory
             'blog_category_id' => $category->id,
         ]);
     }
+
+    public function withGallery(int $count = 3): static
+    {
+        return $this->afterCreating(function (BlogPost $post) use ($count) {
+            foreach (range(1, $count) as $i) {
+                $url = "https://placehold.co/800x600/png?text=Gallery+Image+{$i}";
+
+                try {
+                    $post->addMediaFromUrl($url)
+                        ->toMediaCollection('gallery');
+                } catch (\Throwable $e) {
+                    //
+                }
+            }
+        });
+    }
 }

@@ -33,4 +33,18 @@ class BlogCategoryFactory extends Factory
             'is_visible' => false,
         ]);
     }
+
+    public function withBanner(): static
+    {
+        return $this->afterCreating(function (BlogCategory $category) {
+            $url = 'https://placehold.co/1200x400/png?text='.urlencode($category->name);
+
+            try {
+                $category->addMediaFromUrl($url)
+                    ->toMediaCollection('banner_image');
+            } catch (\Throwable $e) {
+                //
+            }
+        });
+    }
 }

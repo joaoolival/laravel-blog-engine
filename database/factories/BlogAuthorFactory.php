@@ -37,4 +37,18 @@ class BlogAuthorFactory extends Factory
             'is_visible' => false,
         ]);
     }
+
+    public function withAvatar(): static
+    {
+        return $this->afterCreating(function (BlogAuthor $author) {
+            $url = 'https://ui-avatars.com/api/?name='.urlencode($author->name).'&color=7F9CF5&background=EBF4FF';
+
+            try {
+                $author->addMediaFromUrl($url)
+                    ->toMediaCollection('avatar');
+            } catch (\Throwable $e) {
+                //
+            }
+        });
+    }
 }
