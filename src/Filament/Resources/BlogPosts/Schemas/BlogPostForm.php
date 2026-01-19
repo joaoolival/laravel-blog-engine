@@ -37,7 +37,7 @@ class BlogPostForm
                     ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
 
                 TextInput::make('slug')
                     ->required()
@@ -46,14 +46,14 @@ class BlogPostForm
 
                 Select::make('blog_author_id')
                     ->label('Author')
-                    ->relationship('author', 'name', fn(Builder $query) => $query->where('is_visible', true))
+                    ->relationship('author', 'name', fn (Builder $query) => $query->where('is_visible', true))
                     ->searchable()
                     ->preload()
                     ->required(),
 
                 Select::make('blog_category_id')
                     ->label('Category')
-                    ->relationship('category', 'name', fn(Builder $query) => $query->where('is_visible', true))
+                    ->relationship('category', 'name', fn (Builder $query) => $query->where('is_visible', true))
                     ->searchable()
                     ->preload()
                     ->required(),
