@@ -22,9 +22,17 @@ class BlogAuthorForm
                             ->collection('avatar')
                             ->disk('public')
                             ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ])
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+                            ->maxSize(10240)
+                            ->helperText('Formatos aceitos: JPEG, PNG, WebP, AVIF. Tamanho máximo: 10MB.')
                             ->multiple()
                             ->maxFiles(1)
-                            ->maxSize(10240)
                             ->imagePreviewHeight('200')
                             ->columnSpanFull(),
                         TextInput::make('name')

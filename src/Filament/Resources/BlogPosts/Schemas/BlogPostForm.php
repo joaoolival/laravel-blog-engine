@@ -108,8 +108,16 @@ class BlogPostForm
                     ->collection('gallery')
                     ->disk('public')
                     ->image()
-                    ->multiple()
+                    ->imageEditor()
+                    ->imageEditorAspectRatios([
+                        '16:9',
+                        '4:3',
+                        '1:1',
+                    ])
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
                     ->maxSize(10240)
+                    ->helperText('Formatos aceitos: JPEG, PNG, WebP, AVIF. Tamanho máximo: 10MB.')
+                    ->multiple()
                     ->reorderable()
                     ->maxFiles(10)
                     ->columnSpanFull(),
