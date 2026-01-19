@@ -22,15 +22,23 @@ class BlogCategoryForm
                             ->disk('public')
                             ->collection('banner_image')
                             ->image()
+                            ->imageEditor()
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ])
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp', 'image/avif'])
+                            ->maxSize(10240)
+                            ->helperText('Formatos aceitos: JPEG, PNG, WebP, AVIF. Tamanho máximo: 10MB.')
                             ->multiple()
                             ->maxFiles(1)
-                            ->maxSize(10240)
                             ->columnSpanFull(),
                         TextInput::make('name')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
+                            ->afterStateUpdated(fn($state, callable $set) => $set('slug', Str::slug($state))),
                         TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
