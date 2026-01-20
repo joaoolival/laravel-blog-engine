@@ -23,7 +23,7 @@ class BlogCategoryForm
                             ->collection('banner_image')
                             ->image()
                             ->imageEditor()
-                            ->imageEditorAspectRatios([
+                            ->imageEditorAspectRatioOptions([
                                 '16:9',
                                 '4:3',
                                 '1:1',
