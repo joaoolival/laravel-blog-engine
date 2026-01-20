@@ -58,6 +58,11 @@ class BlogPost extends Model implements HasMedia, HasRichContent
         ];
     }
 
+    protected static function newFactory(): BlogPostFactory
+    {
+        return BlogPostFactory::new();
+    }
+
     /**
      * @param  Builder<BlogPost>  $query
      */

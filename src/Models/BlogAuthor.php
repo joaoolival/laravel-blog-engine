@@ -54,6 +54,11 @@ class BlogAuthor extends Model implements HasMedia
         ];
     }
 
+    protected static function newFactory(): BlogAuthorFactory
+    {
+        return BlogAuthorFactory::new();
+    }
+
     /**
      * @return HasMany<BlogPost, $this>
      */

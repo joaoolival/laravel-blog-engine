@@ -9,8 +9,8 @@ A blog engine for Laravel with Filament admin panel integration. Manage posts, a
 
 ## Requirements
 
--   PHP 8.3+
--   Laravel 12.0+
+- PHP 8.3+
+- Laravel 12.0+
 
 ## Installation
 
@@ -30,11 +30,11 @@ php artisan vendor:publish --tag="laravel-blog-engine-config"
 
 You can customize the following for Posts, Authors, and Categories in `config/laravel-blog-engine.php`:
 
--   `label` & `plural_label`: Custom names for resources.
--   `navigation_label`: Label shown in the sidebar.
--   `navigation_group`: Group resources under a specific sidebar group (default: "Blog").
--   `navigation_sort`: Order in the navigation.
--   `navigation_icon`: Heroicon name (e.g., `heroicon-o-pencil`) for the sidebar icon.
+- `label` & `plural_label`: Custom names for resources.
+- `navigation_label`: Label shown in the sidebar.
+- `navigation_group`: Group resources under a specific sidebar group (default: "Blog").
+- `navigation_sort`: Order in the navigation.
+- `navigation_icon`: Heroicon name (e.g., `heroicon-o-pencil`) for the sidebar icon.
 
 ### Authorization
 
@@ -73,9 +73,9 @@ return new BlogPostResource($post);
 
 The resource transforms the `content` HTML, finding image tags with `data-id` and replacing them with:
 
--   WebP conversion
--   `srcset` attributes for responsive loading
--   Lazy loading and async decoding
+- WebP conversion
+- `srcset` attributes for responsive loading
+- Lazy loading and async decoding
 
 > **Note:** Accessing `$post->content` directly returns the raw HTML with custom attributes. Use `BlogPostResource` for fully rendered HTML with responsive images.
 
@@ -134,9 +134,9 @@ BlogPost::whereIsVisible()->get();
 
 Access the Filament admin at `/admin`:
 
--   `/admin/blog-posts`
--   `/admin/blog-authors`
--   `/admin/blog-categories`
+- `/admin/blog-posts`
+- `/admin/blog-authors`
+- `/admin/blog-categories`
 
 ## Responsive Images
 
@@ -150,6 +150,22 @@ php artisan horizon:install
 php artisan horizon
 ```
 
+## Generating Demo Content
+
+Quickly populate your blog with dummy content using the `blog:generate` command:
+
+```bash
+php artisan blog:generate
+```
+
+This will prompt for the number of authors, categories, and posts to create (defaults: 1, 1, 12).
+
+You can also pass options directly:
+
+```bash
+php artisan blog:generate --authors=3 --categories=5 --posts=50
+```
+
 ## Testing
 
 ```bash
@@ -158,7 +174,7 @@ composer test
 
 ## Credits
 
--   [João Olival](https://github.com/joaoolival)
+- [João Olival](https://github.com/joaoolival)
 
 ## Support
 
