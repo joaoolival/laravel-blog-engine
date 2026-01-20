@@ -23,7 +23,7 @@ class BlogAuthorForm
                             ->disk('public')
                             ->image()
                             ->imageEditor()
-                            ->imageEditorAspectRatios([
+                            ->imageEditorAspectRatioOptions([
                                 '16:9',
                                 '4:3',
                                 '1:1',

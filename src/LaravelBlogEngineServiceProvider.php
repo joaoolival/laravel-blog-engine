@@ -19,7 +19,10 @@ class LaravelBlogEngineServiceProvider extends PackageServiceProvider
             ->name('laravel-blog-engine')
             ->hasConfigFile('laravel-blog-engine')
             ->discoversMigrations()
-            ->hasCommand(InstallCommand::class);
+            ->hasCommands([
+                InstallCommand::class,
+                Console\GenerateBlogContentCommand::class,
+            ]);
     }
 
     public function packageRegistered(): void
