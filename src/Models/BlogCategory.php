@@ -46,6 +46,11 @@ class BlogCategory extends Model implements HasMedia
         ];
     }
 
+    protected static function newFactory(): BlogCategoryFactory
+    {
+        return BlogCategoryFactory::new();
+    }
+
     /**
      * @return HasMany<BlogPost, $this>
      */
