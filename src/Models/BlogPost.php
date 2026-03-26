@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Joaoolival\LaravelBlogEngine\Database\Factories\BlogPostFactory;
 use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property-read int $id
@@ -23,12 +25,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read string|null $excerpt
  * @property-read string|null $content
  * @property-read array<int, string>|null $tags
- * @property-read \Illuminate\Support\Carbon|null $published_at
+ * @property-read Carbon|null $published_at
  * @property-read int $blog_author_id
  * @property-read int $blog_category_id
- * @property-read \Illuminate\Support\Carbon|null $created_at
- * @property-read \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read Carbon|null $created_at
+ * @property-read Carbon|null $updated_at
+ * @property-read Carbon|null $deleted_at
  */
 class BlogPost extends Model implements HasMedia, HasRichContent
 {
@@ -47,6 +49,7 @@ class BlogPost extends Model implements HasMedia, HasRichContent
         'blog_category_id',
     ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [
@@ -114,12 +117,11 @@ class BlogPost extends Model implements HasMedia, HasRichContent
         $this->addMediaCollection('content-attachments');
     }
 
-    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
-        /** @phpstan-ignore-next-line */
         $this->addMediaConversion('webp')
-            ->format('webp')
             ->withResponsiveImages()
+            ->format('webp')
             ->performOnCollections('gallery', 'content-attachments');
     }
 }

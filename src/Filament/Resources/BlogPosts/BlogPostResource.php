@@ -22,46 +22,55 @@ class BlogPostResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
+    #[\Override]
     public static function getModelLabel(): string
     {
         return config('laravel-blog-engine.resources.posts.label', 'Blog Post');
     }
 
+    #[\Override]
     public static function getPluralModelLabel(): string
     {
         return config('laravel-blog-engine.resources.posts.plural_label', 'Blog Posts');
     }
 
+    #[\Override]
     public static function getNavigationLabel(): string
     {
         return config('laravel-blog-engine.resources.posts.navigation_label', 'Blog Posts');
     }
 
+    #[\Override]
     public static function getNavigationGroup(): ?string
     {
         return config('laravel-blog-engine.resources.posts.navigation_group', 'Blog');
     }
 
+    #[\Override]
     public static function getNavigationSort(): ?int
     {
         return config('laravel-blog-engine.resources.posts.navigation_sort', 1);
     }
 
+    #[\Override]
     public static function getNavigationIcon(): string|BackedEnum|null
     {
         return config('laravel-blog-engine.resources.posts.navigation_icon', Heroicon::OutlinedRectangleStack);
     }
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return BlogPostForm::configure($schema);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return BlogPostsTable::configure($table);
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [
@@ -69,6 +78,7 @@ class BlogPostResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -81,6 +91,7 @@ class BlogPostResource extends Resource
     /**
      * @return Builder<BlogPost>
      */
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

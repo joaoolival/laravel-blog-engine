@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Joaoolival\LaravelBlogEngine\Facades\Blog;
 use Joaoolival\LaravelBlogEngine\Http\Resources\Categories\BlogCategoryCollection;
@@ -139,14 +140,42 @@ describe('Facade', function () {
 
         it('throws exception for non-existent category', function () {
             expect(fn () => Blog::getCategoryWithPosts('non-existent'))
-                ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+                ->toThrow(ModelNotFoundException::class);
         });
 
         it('throws exception for hidden category', function () {
             BlogCategory::factory()->hidden()->create(['slug' => 'hidden-cat']);
 
             expect(fn () => Blog::getCategoryWithPosts('hidden-cat'))
-                ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+                ->toThrow(ModelNotFoundException::class);
+        });
+
+        it('returns category even with no posts', function () {
+            BlogCategory::factory()->create(['slug' => 'empty-cat', 'is_visible' => true]);
+
+            $result = Blog::getCategoryWithPosts('empty-cat');
+
+            expect($result['category']->slug)->toBe('empty-cat')
+                ->and($result['posts'])->toHaveCount(0);
+        });
+
+        it('excludes soft deleted posts from category', function () {
+            $category = BlogCategory::factory()->create(['slug' => 'del-cat', 'is_visible' => true]);
+            BlogPost::factory()->forCategory($category)->published()->create();
+            $deleted = BlogPost::factory()->forCategory($category)->published()->create();
+            $deleted->delete();
+
+            $result = Blog::getCategoryWithPosts('del-cat');
+
+            expect($result['posts'])->toHaveCount(1);
+        });
+
+        it('throws exception for soft deleted category', function () {
+            $category = BlogCategory::factory()->create(['slug' => 'soft-del-cat', 'is_visible' => true]);
+            $category->delete();
+
+            expect(fn () => Blog::getCategoryWithPosts('soft-del-cat'))
+                ->toThrow(ModelNotFoundException::class);
         });
     });
 });

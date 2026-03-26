@@ -42,7 +42,7 @@ class BlogCategoryFactory extends Factory
             try {
                 $category->addMediaFromUrl($url)
                     ->toMediaCollection('banner_image');
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 //
             }
         });

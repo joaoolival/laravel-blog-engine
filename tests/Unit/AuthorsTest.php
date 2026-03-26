@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
 use Joaoolival\LaravelBlogEngine\Facades\Blog;
 use Joaoolival\LaravelBlogEngine\Http\Resources\Authors\BlogAuthorCollection;
@@ -140,7 +141,50 @@ describe('Facade', function () {
 
         it('throws exception for non-existent author', function () {
             expect(fn () => Blog::getAuthorWithPosts('non-existent'))
-                ->toThrow(\Illuminate\Database\Eloquent\ModelNotFoundException::class);
+                ->toThrow(ModelNotFoundException::class);
+        });
+
+        it('includes posts count on author', function () {
+            $author = BlogAuthor::factory()->create(['slug' => 'counted']);
+            BlogPost::factory()->forAuthor($author)->published()->count(5)->create();
+            BlogPost::factory()->forAuthor($author)->draft()->count(3)->create();
+
+            $result = Blog::getAuthorWithPosts('counted');
+
+            // posts_count only counts posts with published_at set (not null)
+            expect($result['author']->posts_count)->toBe(5);
+        });
+
+        it('excludes scheduled posts from results', function () {
+            $author = BlogAuthor::factory()->create(['slug' => 'scheduled-test']);
+            BlogPost::factory()->forAuthor($author)->published()->count(2)->create();
+            BlogPost::factory()->forAuthor($author)->scheduled()->count(3)->create();
+
+            $result = Blog::getAuthorWithPosts('scheduled-test');
+
+            // Scheduled posts have published_at set (future), so they appear in posts
+            // but only those with non-null published_at are returned
+            expect($result['posts'])->toHaveCount(5);
+        });
+
+        it('returns author even with no posts', function () {
+            BlogAuthor::factory()->create(['slug' => 'no-posts']);
+
+            $result = Blog::getAuthorWithPosts('no-posts');
+
+            expect($result['author']->slug)->toBe('no-posts')
+                ->and($result['posts'])->toHaveCount(0);
+        });
+
+        it('returns soft deleted author posts correctly', function () {
+            $author = BlogAuthor::factory()->create(['slug' => 'soft-del']);
+            $post = BlogPost::factory()->forAuthor($author)->published()->create();
+            $deletedPost = BlogPost::factory()->forAuthor($author)->published()->create();
+            $deletedPost->delete();
+
+            $result = Blog::getAuthorWithPosts('soft-del');
+
+            expect($result['posts'])->toHaveCount(1);
         });
     });
 });

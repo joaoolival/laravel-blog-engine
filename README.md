@@ -10,7 +10,7 @@ A blog engine for Laravel with Filament admin panel integration. Manage posts, a
 ## Requirements
 
 - PHP 8.3+
-- Laravel 12.0+
+- Laravel 12.0+ or 13.0+
 
 ## Installation
 

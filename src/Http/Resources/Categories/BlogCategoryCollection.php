@@ -19,6 +19,7 @@ class BlogCategoryCollection extends ResourceCollection
      *
      * @return array<int|string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         return $this->collection->toArray();

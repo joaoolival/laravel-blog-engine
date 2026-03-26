@@ -84,7 +84,7 @@ class BlogPostFactory extends Factory
                 try {
                     $post->addMediaFromUrl($url)
                         ->toMediaCollection('gallery');
-                } catch (\Throwable $e) {
+                } catch (\Throwable) {
                     //
                 }
             }

@@ -10,6 +10,7 @@ class ListBlogPosts extends ListRecords
 {
     protected static string $resource = BlogPostResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [

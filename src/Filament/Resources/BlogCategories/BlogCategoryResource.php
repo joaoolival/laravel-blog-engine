@@ -22,46 +22,55 @@ class BlogCategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    #[\Override]
     public static function getModelLabel(): string
     {
         return config('laravel-blog-engine.resources.categories.label', 'Blog Category');
     }
 
+    #[\Override]
     public static function getPluralModelLabel(): string
     {
         return config('laravel-blog-engine.resources.categories.plural_label', 'Blog Categories');
     }
 
+    #[\Override]
     public static function getNavigationLabel(): string
     {
         return config('laravel-blog-engine.resources.categories.navigation_label', 'Blog Categories');
     }
 
+    #[\Override]
     public static function getNavigationGroup(): ?string
     {
         return config('laravel-blog-engine.resources.categories.navigation_group', 'Blog');
     }
 
+    #[\Override]
     public static function getNavigationSort(): ?int
     {
         return config('laravel-blog-engine.resources.categories.navigation_sort', 3);
     }
 
+    #[\Override]
     public static function getNavigationIcon(): string|BackedEnum|null
     {
         return config('laravel-blog-engine.resources.categories.navigation_icon', Heroicon::OutlinedRectangleStack);
     }
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return BlogCategoryForm::configure($schema);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return BlogCategoriesTable::configure($table);
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [
@@ -69,6 +78,7 @@ class BlogCategoryResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -81,6 +91,7 @@ class BlogCategoryResource extends Resource
     /**
      * @return Builder<BlogCategory>
      */
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

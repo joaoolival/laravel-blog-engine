@@ -20,7 +20,7 @@ final readonly class RenderContentAction
         // Render content with resolved image URLs using the model's rich content renderer
         try {
             $html = $post->renderRichContent('content');
-        } catch (\BadMethodCallException $e) {
+        } catch (\BadMethodCallException) {
             // Str::sanitizeHtml doesn't exist in test environment, return raw content
             return $post->content;
         }
@@ -77,7 +77,7 @@ final readonly class RenderContentAction
                         $webpUrl = htmlspecialchars($data['url']);
 
                         // Add responsive attributes if srcset is available
-                        if ($srcset) {
+                        if ($srcset !== '' && $srcset !== '0') {
                             return sprintf(
                                 '<img %ssrc="%s" srcset="%s" sizes="(max-width: 768px) 100vw, 800px" loading="lazy" decoding="async"%s>',
                                 $before,
