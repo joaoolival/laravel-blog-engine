@@ -1,2 +1,37 @@
 parameters:
-    ignoreErrors: []
+	ignoreErrors:
+		-
+			message: '#^Method Joaoolival\\LaravelBlogEngine\\Filament\\Resources\\BlogAuthors\\BlogAuthorResource\:\:getRecordRouteBindingEloquentQuery\(\) should return Illuminate\\Database\\Eloquent\\Builder\<Joaoolival\\LaravelBlogEngine\\Models\\BlogAuthor\> but returns Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Filament/Resources/BlogAuthors/BlogAuthorResource.php
+
+		-
+			message: '#^Method Joaoolival\\LaravelBlogEngine\\Filament\\Resources\\BlogCategories\\BlogCategoryResource\:\:getRecordRouteBindingEloquentQuery\(\) should return Illuminate\\Database\\Eloquent\\Builder\<Joaoolival\\LaravelBlogEngine\\Models\\BlogCategory\> but returns Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Filament/Resources/BlogCategories/BlogCategoryResource.php
+
+		-
+			message: '#^Method Joaoolival\\LaravelBlogEngine\\Filament\\Resources\\BlogPosts\\BlogPostResource\:\:getRecordRouteBindingEloquentQuery\(\) should return Illuminate\\Database\\Eloquent\\Builder\<Joaoolival\\LaravelBlogEngine\\Models\\BlogPost\> but returns Illuminate\\Database\\Eloquent\\Builder\<Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Filament/Resources/BlogPosts/BlogPostResource.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:performOnCollections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Models/BlogAuthor.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:performOnCollections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Models/BlogCategory.php
+
+		-
+			message: '#^Call to an undefined method Spatie\\Image\\Drivers\\ImageDriver\:\:performOnCollections\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Models/BlogPost.php

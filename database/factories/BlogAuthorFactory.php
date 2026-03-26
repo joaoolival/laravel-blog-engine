@@ -46,7 +46,7 @@ class BlogAuthorFactory extends Factory
             try {
                 $author->addMediaFromUrl($url)
                     ->toMediaCollection('avatar');
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 //
             }
         });

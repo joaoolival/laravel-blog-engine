@@ -22,46 +22,55 @@ class BlogAuthorResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    #[\Override]
     public static function getModelLabel(): string
     {
         return config('laravel-blog-engine.resources.authors.label', 'Blog Author');
     }
 
+    #[\Override]
     public static function getPluralModelLabel(): string
     {
         return config('laravel-blog-engine.resources.authors.plural_label', 'Blog Authors');
     }
 
+    #[\Override]
     public static function getNavigationLabel(): string
     {
         return config('laravel-blog-engine.resources.authors.navigation_label', 'Blog Authors');
     }
 
+    #[\Override]
     public static function getNavigationGroup(): ?string
     {
         return config('laravel-blog-engine.resources.authors.navigation_group', 'Blog');
     }
 
+    #[\Override]
     public static function getNavigationSort(): ?int
     {
         return config('laravel-blog-engine.resources.authors.navigation_sort', 2);
     }
 
+    #[\Override]
     public static function getNavigationIcon(): string|BackedEnum|null
     {
         return config('laravel-blog-engine.resources.authors.navigation_icon', Heroicon::OutlinedRectangleStack);
     }
 
+    #[\Override]
     public static function form(Schema $schema): Schema
     {
         return BlogAuthorForm::configure($schema);
     }
 
+    #[\Override]
     public static function table(Table $table): Table
     {
         return BlogAuthorsTable::configure($table);
     }
 
+    #[\Override]
     public static function getRelations(): array
     {
         return [
@@ -69,6 +78,7 @@ class BlogAuthorResource extends Resource
         ];
     }
 
+    #[\Override]
     public static function getPages(): array
     {
         return [
@@ -81,6 +91,7 @@ class BlogAuthorResource extends Resource
     /**
      * @return Builder<BlogAuthor>
      */
+    #[\Override]
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {
         return parent::getRecordRouteBindingEloquentQuery()

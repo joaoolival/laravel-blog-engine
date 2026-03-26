@@ -5,6 +5,7 @@ namespace Joaoolival\LaravelBlogEngine\Http\Resources\Authors;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @mixin BlogAuthor
@@ -16,6 +17,7 @@ class BlogAuthorResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         $media = $this->getFirstMedia('avatar');
@@ -31,7 +33,7 @@ class BlogAuthorResource extends JsonResource
             'linkedin_handle' => $this->linkedin_handle,
             'instagram_handle' => $this->instagram_handle,
             'facebook_handle' => $this->facebook_handle,
-            'avatar' => $media ? [
+            'avatar' => $media instanceof Media ? [
                 'url' => $media->getUrl('webp'),
                 'srcset' => $media->getSrcset('webp'),
                 'original_url' => $media->getUrl(),

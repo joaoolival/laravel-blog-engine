@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Joaoolival\LaravelBlogEngine\BlogPlugin;
 use Joaoolival\LaravelBlogEngine\LaravelBlogEngineServiceProvider;
+use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\info;
@@ -74,7 +75,7 @@ class InstallCommand extends Command
             ]);
 
             $this->callSilently('vendor:publish', [
-                '--provider' => 'Spatie\MediaLibrary\MediaLibraryServiceProvider',
+                '--provider' => MediaLibraryServiceProvider::class,
                 '--tag' => 'medialibrary-migrations',
             ]);
         });
@@ -114,11 +115,9 @@ class InstallCommand extends Command
     {
         $panelProviderPath = $this->findPanelProvider();
 
-        if (! $panelProviderPath) {
-            if (confirm('No Filament panel found. Would you like to create one?', default: true)) {
-                $this->createFilamentPanel();
-                $panelProviderPath = $this->findPanelProvider();
-            }
+        if (! $panelProviderPath && confirm('No Filament panel found. Would you like to create one?', default: true)) {
+            $this->createFilamentPanel();
+            $panelProviderPath = $this->findPanelProvider();
         }
 
         if ($panelProviderPath) {
@@ -170,15 +169,15 @@ class InstallCommand extends Command
         }
 
         // Register plugin if not present
-        if (! str_contains($contents, 'BlogPlugin::make()') && ! str_contains($contents, 'new BlogPlugin()')) {
+        if (! str_contains((string) $contents, 'BlogPlugin::make()') && ! str_contains((string) $contents, 'new BlogPlugin()')) {
             $patterns = [
                 '/(->\s*authMiddleware\s*\(\s*\[)/' => "->plugin(BlogPlugin::make())\n            \$1",
                 '/(->\s*plugins\s*\(\s*\[)/' => "\$1\n                BlogPlugin::make(),",
             ];
 
             foreach ($patterns as $pattern => $replacement) {
-                if (preg_match($pattern, $contents)) {
-                    $contents = preg_replace($pattern, $replacement, $contents, 1);
+                if (preg_match($pattern, (string) $contents)) {
+                    $contents = preg_replace($pattern, $replacement, (string) $contents, 1);
                     $modified = true;
                     break;
                 }

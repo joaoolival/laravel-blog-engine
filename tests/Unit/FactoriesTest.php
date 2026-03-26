@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\File;
 use Joaoolival\LaravelBlogEngine\Models\BlogAuthor;
 use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
@@ -75,14 +76,14 @@ describe('BlogPostFactory', function () {
     it('creates a scheduled post with scheduled state', function () {
         $post = BlogPost::factory()->scheduled()->create();
 
-        expect($post->published_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class)
+        expect($post->published_at)->toBeInstanceOf(Carbon::class)
             ->and($post->published_at->isFuture())->toBeTrue();
     });
 
     it('creates a published post with published state', function () {
         $post = BlogPost::factory()->published()->create();
 
-        expect($post->published_at)->toBeInstanceOf(\Illuminate\Support\Carbon::class)
+        expect($post->published_at)->toBeInstanceOf(Carbon::class)
             ->and($post->published_at->isPast())->toBeTrue()
             ->and($post->is_visible)->toBeTrue();
     });

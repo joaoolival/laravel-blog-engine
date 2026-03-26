@@ -5,6 +5,7 @@ namespace Joaoolival\LaravelBlogEngine\Http\Resources\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Joaoolival\LaravelBlogEngine\Models\BlogCategory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @mixin BlogCategory
@@ -16,6 +17,7 @@ class BlogCategoryResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         $media = $this->getFirstMedia('banner_image');
@@ -28,7 +30,7 @@ class BlogCategoryResource extends JsonResource
             'is_visible' => $this->is_visible,
             'seo_title' => $this->seo_title,
             'seo_description' => $this->seo_description,
-            'banner_image' => $media ? [
+            'banner_image' => $media instanceof Media ? [
                 'url' => $media->getUrl('webp'),
                 'srcset' => $media->getSrcset('webp'),
                 'original_url' => $media->getUrl(),

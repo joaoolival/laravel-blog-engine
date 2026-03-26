@@ -21,7 +21,7 @@ use Joaoolival\LaravelBlogEngine\Models\BlogPost;
  * @method static Collection<int, BlogCategory> getAllCategories()
  * @method static array{category: BlogCategory, posts: LengthAwarePaginator<int, BlogPost>|Collection<int, BlogPost>} getCategoryWithPosts(string $slug, ?int $perPage = null)
  *
- * @see \Joaoolival\LaravelBlogEngine\BlogService
+ * @see BlogService
  */
 class Blog extends Facade
 {

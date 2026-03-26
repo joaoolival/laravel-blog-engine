@@ -12,6 +12,7 @@ class EditBlogPost extends EditRecord
 {
     protected static string $resource = BlogPostResource::class;
 
+    #[\Override]
     protected function getHeaderActions(): array
     {
         return [

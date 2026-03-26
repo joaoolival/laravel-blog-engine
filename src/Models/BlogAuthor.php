@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Joaoolival\LaravelBlogEngine\Database\Factories\BlogAuthorFactory;
 use Joaoolival\LaravelBlogEngine\Traits\HasVisibility;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * @property-read int $id
@@ -23,9 +25,9 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read string|null $linkedin_handle
  * @property-read string|null $instagram_handle
  * @property-read string|null $facebook_handle
- * @property-read \Illuminate\Support\Carbon|null $created_at
- * @property-read \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read Carbon|null $created_at
+ * @property-read Carbon|null $updated_at
+ * @property-read Carbon|null $deleted_at
  */
 class BlogAuthor extends Model implements HasMedia
 {
@@ -45,6 +47,7 @@ class BlogAuthor extends Model implements HasMedia
         'facebook_handle',
     ];
 
+    #[\Override]
     protected function casts(): array
     {
         return [
@@ -73,12 +76,11 @@ class BlogAuthor extends Model implements HasMedia
             ->singleFile();
     }
 
-    public function registerMediaConversions(?\Spatie\MediaLibrary\MediaCollections\Models\Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
-        /** @phpstan-ignore-next-line */
         $this->addMediaConversion('webp')
-            ->format('webp')
             ->withResponsiveImages()
+            ->format('webp')
             ->performOnCollections('avatar');
     }
 }

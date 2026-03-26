@@ -19,6 +19,7 @@ class BlogPostResource extends JsonResource
      *
      * @return array<string, mixed>
      */
+    #[\Override]
     public function toArray(Request $request): array
     {
         $galleryMedia = $this->getMedia('gallery');
@@ -38,14 +39,12 @@ class BlogPostResource extends JsonResource
                 'srcset' => $bannerMedia->getSrcset('webp'),
                 'original_url' => $bannerMedia->getUrl(),
             ] : null,
-            'gallery' => $galleryMedia->skip(1)->map(function ($media) {
-                return [
-                    'id' => $media->id,
-                    'url' => $media->getUrl('webp'),
-                    'srcset' => $media->getSrcset('webp'),
-                    'original_url' => $media->getUrl(),
-                ];
-            })->values(),
+            'gallery' => $galleryMedia->skip(1)->map(fn ($media) => [
+                'id' => $media->id,
+                'url' => $media->getUrl('webp'),
+                'srcset' => $media->getSrcset('webp'),
+                'original_url' => $media->getUrl(),
+            ])->values(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
