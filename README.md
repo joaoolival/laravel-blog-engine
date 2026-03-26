@@ -10,7 +10,9 @@ A blog engine for Laravel with Filament admin panel integration. Manage posts, a
 ## Requirements
 
 - PHP 8.3+
-- Laravel 12.0+ or 13.0+
+- Laravel 12 or 13
+- Filament 5
+- Spatie Laravel Media Library 11
 
 ## Installation
 
@@ -48,7 +50,7 @@ php artisan make:policy BlogPostPolicy --model=\Joaoolival\LaravelBlogEngine\Mod
 
 Then register them in your application's `AuthServiceProvider` (or `AppServiceProvider` in newer Laravel versions).
 
-For more details, see the [Filament Resource Authorization documentation](https://filamentphp.com/docs/3.x/panels/resources/getting-started#authorization).
+For more details, see the [Filament Resource Authorization documentation](https://filamentphp.com/docs/5.x/panels/resources/getting-started#authorization).
 
 ## Basic Usage
 
